@@ -20,64 +20,66 @@ app.get("/test", (req, res) => {
 
 // Register Route
 app.post('/register', [
-  body('name').trim().notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Invalid email address'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  body('phoneNumber').isMobilePhone().withMessage('Invalid phone number'),
-  body('address').trim().notEmpty().withMessage('Address is required'),
-  body('isAdmin').isBoolean().withMessage('isAdmin must be a boolean'),
-  body('adminCode').if(body('isAdmin').equals('true')).notEmpty().withMessage('Admin code is required for admin registration')
+    body('name').trim().notEmpty().withMessage('Name is required'),
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('phoneNumber').isMobilePhone().withMessage('Invalid phone number'),
+    body('address').trim().notEmpty().withMessage('Address is required'),
+    body('isAdmin').isBoolean().withMessage('isAdmin must be a boolean'),
+    body('adminCode')
+      .if(body('isAdmin').equals(true)) // Validate only if isAdmin is true
+      .notEmpty()
+      .withMessage('Admin code is required for admin registration')
 ], async (req, res) => {
-  try {
-    // Check for validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    try {
+        // Check for validation errors
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { name, email, password, phoneNumber, address, isAdmin, adminCode } = req.body;
+
+        // Check if the email already exists in the database
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: "Email already in use" });
+        }
+
+        // If registering as admin, validate the admin code
+        if (isAdmin) {
+            const validAdminCode = '271103'; // Admin code as string for comparison
+            if (adminCode !== validAdminCode) {
+                return res.status(400).json({ error: "Invalid admin code" });
+            }
+        }
+
+        // Hash the password
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // Create and save the new user
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword,
+            phoneNumber,
+            address,
+            isAdmin
+        });
+
+        const savedUser = await newUser.save();
+
+        // Remove sensitive information before sending the response
+        const userResponse = savedUser.toObject();
+        delete userResponse.password;
+
+        res.status(201).json(userResponse);
+    } catch (error) {
+        console.error("Error during registration:", error);
+        res.status(500).json({ error: "Registration failed. Please try again." });
     }
-
-    const { name, email, password, phoneNumber, address, isAdmin, adminCode } = req.body;
-
-    // Check if the email already exists in the database
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "Email already in use" });
-    }
-
-    // If registering as admin, validate the admin code
-    if (isAdmin) {
-      const validAdminCode = process.env.ADMIN_CODE || "271103"; // Store this securely in an environment variable
-      if (adminCode !== validAdminCode) {
-        return res.status(400).json({ error: "Invalid admin code" });
-      }
-    }
-
-    // Hash the password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Create and save the new user
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      phoneNumber,
-      address,
-      isAdmin
-    });
-
-    const savedUser = await newUser.save();
-
-    // Remove sensitive information before sending the response
-    const userResponse = savedUser.toObject();
-    delete userResponse.password;
-
-    res.status(201).json(userResponse);
-  } catch (error) {
-    console.error("Error during registration:", error);
-    res.status(500).json({ error: "Error saving user" });
-  }
 });
-
 // Login Route
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;

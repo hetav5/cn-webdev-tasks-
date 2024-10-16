@@ -6,7 +6,7 @@ import logo from "../assets/icon1.png";
 function Navbar() {
   const auth = localStorage.getItem('user');
   const user = auth ? JSON.parse(auth) : null;
-  // const isAdmin = user && user.isAdmin;
+  const isAdmin = user && user.isAdmin; // Check if the user is an admin
   const navigate = useNavigate();
 
   const logout = () => {
@@ -23,11 +23,18 @@ function Navbar() {
         {user ? 
           <>
             <li><Link to="/">Home</Link></li>
-            <li><Link to="/addproduct">Add Product</Link></li>
-            <li><Link to="/update">Update Product</Link></li>
-            <li><Link to="/products">Products</Link></li>
-            <li><Link to="/cart">Cart</Link></li>
-            <li><Link to="/profile">{user.name}</Link></li>
+            {isAdmin ? (
+              <>
+                <li><Link to="/addproduct">Add Product</Link></li>
+                <li><Link to="/update">Update Product</Link></li>
+              </>
+            ) : (
+              <>
+                <li><Link to="/products">Products</Link></li>
+                <li><Link to="/cart">Cart</Link></li>
+                <li><Link to="/profile">Profile</Link></li>
+              </>
+            )}
             <li><button onClick={logout}>Logout</button></li>
           </>
         : (
