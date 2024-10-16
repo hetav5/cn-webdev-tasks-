@@ -23,10 +23,10 @@ function Navbar() {
         {user ? 
           <>
             <li><Link to="/">Home</Link></li>
-                <li><Link to="/addproduct">Add Product</Link></li>
-                <li><Link to="/update">Update Product</Link></li>
+            <li><Link to="/addproduct">Add Product</Link></li>
+            <li><Link to="/update">Update Product</Link></li>
             <li><Link to="/products">Products</Link></li>
-            <li><Link to="/addtocart">Cart</Link></li>
+            <li><Link to="/cart">Cart</Link></li>
             <li><Link to="/profile">{user.name}</Link></li>
             <li><button onClick={logout}>Logout</button></li>
           </>
