@@ -1,0 +1,32 @@
+This project is a web-based implementation of the classic Hangman game. Here's a summary of its components and functionality:
+
+1. HTML (hangmangame.html):
+- Provides the structure for the game interface
+- Includes an SVG element for drawing the hangman figure
+- Contains containers for displaying wrong letters and the word to guess
+- Features a rules box explaining the game mechanics
+- Includes popup elements for game-over messages and notifications
+
+2. CSS (hangmanstyles.css):
+- Styles the game with a dark, gradient background
+- Implements responsive design for various screen sizes
+- Provides animations and transitions for a more engaging user experience
+- Styles the hangman figure, word display, and UI elements
+
+3.JavaScript (hangmanscript.js):
+- Manages the game logic
+- Randomly selects words from a predefined list
+- Handles user input (keypress events)
+- Updates the display of correct and incorrect guesses
+- Manages the hangman figure display
+- Implements win/lose conditions and game reset functionality
+
+Key features:
+- Interactive hangman figure that appears part by part with incorrect guesses
+- Dynamic word display that reveals correct letter guesses
+- Wrong letters display
+- Popup notifications for repeated guesses
+- Win/lose messages with the option to play again
+- Responsive design that adapts to different screen sizes
+
+The game provides an engaging, visually appealing implementation of Hangman with clear rules and intuitive gameplay. It demonstrates a good use of HTML5, CSS3, and vanilla JavaScript to create an interactive web application.
