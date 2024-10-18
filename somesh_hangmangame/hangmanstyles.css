@@ -1,0 +1,239 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    font-family: 'Roboto', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 3.5rem;
+    margin: 30px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.game-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    position: relative;
+    height: 450px;
+    width: 550px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    margin-right: 30px;
+}
+
+.figure-container {
+    fill: transparent;
+    stroke: #fff;
+    stroke-width: 4px;
+    stroke-linecap: round;
+}
+
+.figure-part {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.figure-part.show {
+    display: block;
+    opacity: 1;
+}
+
+.wrong-letters-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.wrong-letters-container p {
+    margin: 0 0 5px;
+    font-size: 1.2rem;
+}
+
+.wrong-letters-container span {
+    font-size: 1.5rem;
+    color: #e74c3c;
+}
+
+.word {
+    display: flex;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.letter {
+    border-bottom: 3px solid #3498db;
+    display: inline-flex;
+    font-size: 2.2rem;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    height: 55px;
+    width: 35px;
+    transition: all 0.3s ease;
+}
+
+.popup-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.popup {
+    background: linear-gradient(135deg, #2980b9, #3498db);
+    border-radius: 10px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+}
+
+.popup h2 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+.popup button {
+    cursor: pointer;
+    background-color: #fff;
+    color: #2980b9;
+    border: none;
+    border-radius: 5px;
+    margin-top: 25px;
+    padding: 14px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.popup button:hover {
+    background-color: #2980b9;
+    color: #fff;
+}
+
+.popup button:active {
+    transform: scale(0.98);
+}
+
+.popup button:focus {
+    outline: none;
+}
+
+.notification-container {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px 10px 0 0;
+    padding: 15px 20px;
+    position: fixed;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.notification-container p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.notification-container.show {
+    transform: translate(-50%, -60px);
+}
+
+.rules-box {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    width: 300px;
+    height: 450px; /* Match the height of game-container */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.rules-box h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.rules-box ul {
+    padding-left: 25px;
+}
+
+.rules-box li {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 1000px) {
+    .main-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-container {
+        margin-right: 0;
+        margin-bottom: 30px;
+    }
+
+    .rules-box {
+        width: 550px;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.8rem;
+    }
+
+    .game-container, .rules-box {
+        width: 90%;
+        height: auto;
+        padding: 20px;
+    }
+
+    .letter {
+        font-size: 1.8rem;
+        height: 45px;
+        width: 30px;
+    }
+}
