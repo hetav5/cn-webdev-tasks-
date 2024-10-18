@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Cart.css'; // Ensure you import the CSS file for styling
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import './Cart.css'; 
+import logo from "../assets/icon2.webp";
+
 
 const Cart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -14,8 +18,8 @@ const Cart = () => {
             if (user) {
                 try {
                     const response = await axios.get(`http://localhost:5000/cart/${user._id}`);
-                    setCartItems(response.data.items); // Assuming the response has an 'items' array
-                    calculateTotalPrice(response.data.items); // Calculate total price on fetch
+                    setCartItems(response.data.items);
+                    calculateTotalPrice(response.data.items);
                 } catch (error) {
                     console.error("Error fetching cart data:", error);
                 } finally {
@@ -27,34 +31,29 @@ const Cart = () => {
         fetchCart();
     }, [user]);
 
-    // Function to calculate the total price
     const calculateTotalPrice = (items) => {
         const total = items.reduce((acc, item) => {
             return acc + (item.productId.price * item.quantity);
         }, 0);
         setTotalPrice(total);
     };
-
-    // Function to handle removal of an item from the cart
     const removeFromCart = async (productId, quantity) => {
         if (user) {
             try {
-                // Call API to remove the item from the cart
                 await axios.post('http://localhost:5000/remove-from-cart', {
                     userId: user._id,
                     productId,
                 });
 
-                // Update cartItems based on quantity
                 const updatedItems = cartItems.reduce((acc, item) => {
                     if (item.productId._id === productId) {
                         if (quantity > 1) {
                             return [...acc, { ...item, quantity: item.quantity - 1 }];
                         } else {
-                            return acc; // Skip adding this item
+                            return acc;
                         }
                     }
-                    return [...acc, item]; // Keep other items
+                    return [...acc, item]; 
                 }, []);
 
                 setCartItems(updatedItems);
@@ -65,29 +64,45 @@ const Cart = () => {
         }
     };
 
-    // Function to create a bill
     const createBill = () => {
-        const billContent = cartItems.map(item => ({
-            name: item.productId.name,
-            quantity: item.quantity,
-            price: item.productId.price,
-            total: item.productId.price * item.quantity,
-        }));
+        const doc = new jsPDF();
 
-        // You can format this content into a bill format or display it in an alert, etc.
-        const bill = `
-            Bill Summary:
-            ${billContent.map(item => `${item.name} (x${item.quantity}): ₹${item.total}`).join('\n')}
-            -------------------------
-            Total Price: ₹${totalPrice}
-        `;
+        const img = new Image();
+        img.src = logo;
 
-        // Display the bill in an alert or console (you can also implement printing or PDF generation)
-        alert(bill);
+        img.onload = () => {
+            doc.addImage(img, 'PNG', 10, 10, 50, 30); 
+            doc.setFontSize(12);
+            
+            doc.text(`Customer: ${user.name}`, 10, 50);
+            doc.text(`Phone: ${user.phone}`, 10, 60);
+            doc.text(`Address: ${user.address}`, 10, 70);
+
+            doc.setFontSize(18);
+            doc.text('Bill Summary', 10, 90);
+
+            const billContent = cartItems.map(item => [
+                item.productId.name,
+                item.quantity,
+                item.productId.price,
+                item.productId.price * item.quantity
+            ]);
+
+            doc.autoTable({
+                startY: 100,
+                head: [['Product Name', 'Quantity', 'Price (₹)', 'Total (₹)']],
+                body: billContent,
+            });
+
+            doc.setFontSize(16);
+            doc.text(`Total Price: ₹ ${totalPrice}`, 10, doc.autoTable.previous.finalY + 20);
+
+            doc.save('bill.pdf');
+        };
     };
 
     if (loading) {
-        return <div className="loading"></div>; // Show loading spinner
+        return <div className="loading"></div>; 
     }
 
     return (

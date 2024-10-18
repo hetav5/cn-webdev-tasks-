@@ -1,32 +1,38 @@
 .cart-container {
     font-family: Arial, sans-serif;
-    background-color: #f3f3f3;
+    background-color: #f9f9f9; 
     padding: 20px;
+    max-width: 1200px; 
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); 
+    border-radius: 10px; 
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px; 
 }
 
 .create-bill-button {
     padding: 10px 20px;
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
 }
 
 .create-bill-button:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #218838; 
 }
 
 .product-card {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     justify-content: center;
     margin-top: 20px;
@@ -40,11 +46,11 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
+    transition: transform 0.2s ease;
 }
 
 .product-item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-5px); 
 }
 
 .price, .stock {
@@ -53,25 +59,62 @@
     color: #555;
 }
 
+.price {
+    font-weight: bold;
+    color: #B12704;
+}
+
+.stock {
+    font-style: italic;
+    color: #28a745;
+}
+
+.out-of-stock {
+    color: #d9534f;
+}
+
 .total-price {
     font-size: 18px;
     font-weight: bold;
     text-align: right;
     margin-top: 20px;
-    color: #B12704; /* Color to match price */
+    color: #B12704; 
 }
 
 .remove-button {
     padding: 10px;
-    background-color: #d9534f; /* Bootstrap danger color */
+    background-color: #d9534f; 
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s;
+    margin-top: auto; 
+    transition: background-color 0.3s ease;
 }
 
 .remove-button:hover {
-    background-color: #c9302c; /* Darker red on hover */
+    background-color: #c9302c; 
+}
+
+.loading {
+    text-align: center;
+    font-size: 18px;
+    padding: 50px;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .product-card {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .create-bill-button {
+        margin-top: 10px;
+        width: 100%; 
+    }
 }
