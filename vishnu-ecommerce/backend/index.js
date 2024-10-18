@@ -6,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 const app = express();
 const User = require('./db/User'); 
 const Product = require('./db/Product');
-const Cart = require('./db/Cart');  // Assuming you've created a Cart model
+const Cart = require('./db/Cart');  
 require('./db/config');
 
 // Middleware
@@ -27,12 +27,11 @@ app.post('/register', [
     body('address').trim().notEmpty().withMessage('Address is required'),
     body('isAdmin').isBoolean().withMessage('isAdmin must be a boolean'),
     body('adminCode')
-      .if(body('isAdmin').equals(true)) // Validate only if isAdmin is true
+      .if(body('isAdmin').equals(true))
       .notEmpty()
       .withMessage('Admin code is required for admin registration')
 ], async (req, res) => {
     try {
-        // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -40,25 +39,20 @@ app.post('/register', [
 
         const { name, email, password, phoneNumber, address, isAdmin, adminCode } = req.body;
 
-        // Check if the email already exists in the database
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: "Email already in use" });
         }
-
-        // If registering as admin, validate the admin code
         if (isAdmin) {
-            const validAdminCode = '271103'; // Admin code as string for comparison
+            const validAdminCode = '271103';
             if (adminCode !== validAdminCode) {
                 return res.status(400).json({ error: "Invalid admin code" });
             }
         }
 
-        // Hash the password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Create and save the new user
         const newUser = new User({
             name,
             email,
@@ -70,7 +64,6 @@ app.post('/register', [
 
         const savedUser = await newUser.save();
 
-        // Remove sensitive information before sending the response
         const userResponse = savedUser.toObject();
         delete userResponse.password;
 
@@ -84,24 +77,19 @@ app.post('/register', [
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
-    // Validate the input
     if (!email || !password) {
         return res.status(400).json({ error: "Email and password are required" });
     }
 
     try {
-        // Find the user by email
         let user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ error: "No user found" });
         }
-        // Check if the password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: "Invalid password" });
         }
-
-        // Remove the password before sending the response
         user = user.toObject();
         delete user.password;
         res.status(200).json(user);
@@ -200,25 +188,21 @@ app.post('/add-to-cart', async (req, res) => {
   } 
 });
 
-// Get cart items
 // Get cart items for a specific user
 app.get('/cart/:userId', async (req, res) => {
     try {
         const { userId } = req.params;
         
-        // Validate userId
         if (!userId) {
             return res.status(400).json({ message: 'User ID is required.' });
         }
 
-        // Fetch the user's cart and populate product details
         const cart = await Cart.findOne({ userId }).populate('items.productId', 'name price quantity description');
 
         if (!cart || !cart.items.length) {
             return res.status(404).json({ message: 'Cart is empty or does not exist.' });
         }
 
-        // Send the cart data
         res.status(200).json(cart);
     } catch (error) {
         console.error('Error fetching cart:', error);
@@ -253,7 +237,7 @@ app.post('/remove-from-cart', async (req, res) => {
     }
 });
 
-
+// search
 app.get("/search/:key", async (req, res) => {
   try {
       let result = await Product.find({
@@ -262,8 +246,6 @@ app.get("/search/:key", async (req, res) => {
               { category: { $regex: req.params.key, $options: "i" } }
           ]
       });
-
-      // Check if products are found
       if (result.length > 0) {
           res.status(200).json(result);
       } else {
