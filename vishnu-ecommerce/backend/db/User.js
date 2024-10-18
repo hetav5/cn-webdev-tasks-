@@ -1,3 +1,5 @@
+// models/User.js
+
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
@@ -22,7 +24,7 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: { 
         type: String, 
         required: true,
-        match: [/^\d{10}$/, 'Please provide a valid phone number.'] // Assumes a 10-digit phone number format
+        match: [/^\d{10}$/, 'Please provide a valid phone number.']
     },
     address: { 
         type: String, 
@@ -32,7 +34,7 @@ const UserSchema = new mongoose.Schema({
     isAdmin: { 
         type: Boolean, 
         default: false 
-    } // Field to indicate admin status (true for admin, false for regular user)
+    }
 }, { timestamps: true });
 
 const User = mongoose.model("User", UserSchema);
