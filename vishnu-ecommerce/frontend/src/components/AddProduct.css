@@ -1,126 +1,87 @@
-.product-container {
-    font-family: Arial, sans-serif;
-    background-color: #f3f3f3;
+
+.add-product-container {
+    max-width: 600px;
+    margin: 50px auto;
     padding: 20px;
-    min-height: 100vh; /* Ensures the container takes full height */
-    margin: 0 auto; /* Centers the container */
-}
-
-h1 {
-    text-align: center;
-    color: #131921;
-    margin: 20px 0 30px; /* Adjusted spacing for better alignment */
-}
-
-.search-container {
-    display: flex;
-    justify-content: center;
-    max-width: 800px;
-    margin: 0 auto 30px;
-}
-
-.search-form {
-    display: flex;
-    width: 100%;
-}
-
-.category-select {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #f3f3f3;
-    border: 1px solid #cdcdcd;
-    border-right: none;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    cursor: pointer;
-    outline: none; /* Accessibility enhancement */
-}
-
-.search-input {
-    flex: 1;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: 1px solid #cdcdcd;
-    outline: none;
-    border-radius: 0; /* Ensures a clean border */
-}
-
-.search-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #febd69;
-    border: none;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s; /* Smooth hover effect */
-}
-
-.search-button:hover {
-    background-color: #f90;
-}
-
-.product-card {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.product-item {
     background-color: #fff;
-    border: 1px solid #e7e7e7;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    transition: box-shadow 0.3s;
+}
+
+.add-product-container:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+form {
     display: flex;
     flex-direction: column;
-    transition: box-shadow 0.3s; /* Added hover effect */
 }
 
-.product-item:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.product-item h3 {
-    color: #0F1111;
-    margin-bottom: 10px;
-    font-size: 18px;
-    line-height: 24px;
-    height: 48px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.product-item p {
-    color: #565959;
+input, textarea {
+    padding: 12px;
     font-size: 14px;
-    line-height: 20px;
-    margin-bottom: 10px;
-    flex-grow: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Limits to 3 lines */
-    -webkit-box-orient: vertical;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    margin-bottom: 15px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.product-item .price {
+input:focus, textarea:focus {
+    border-color: #febd69;
+    box-shadow: 0 0 4px rgba(254, 189, 105, 0.5);
+}
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+button[type="submit"] {
+    padding: 12px;
+    background-color: #febd69;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    color: #fff;
+    margin-top: 10px;
     font-weight: bold;
-    font-size: 18px;
-    color: #B12704;
-    margin-top: 10px; /* Adjusted for better spacing */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.rating {
-    color: #FFA41C;
+button[type="submit"]:hover {
+    background-color: #f90;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.error-message {
+    color: #d9534f;
     font-size: 14px;
-    margin-bottom: 5px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    display: none;
+    text-align: left;
 }
 
-.prime {
-    color: #00A8E1;
-    font-size: 12px;
-    margin-top: 5px;
+.error-message.active {
+    display: block; 
+}
+
+input, textarea, button[type="submit"] {
+    width: 100%;
+    box-sizing: border-box;
 }

@@ -32,7 +32,7 @@ h1 {
 }
 
 .search-button {
-  padding: 10px 10px; /* Set padding for height */
+  padding: 10px 10px;
   font-size: 16px;
   background-color: #febd69;
   border: 1px solid #cdcdcd;
@@ -41,7 +41,7 @@ h1 {
   color: #131921;
   cursor: pointer;
   transition: background-color 0.3s;
-  width: 100px; /* Set a fixed width */
+  width: 100px;
   height: 50px;
 }
 
@@ -51,7 +51,7 @@ h1 {
 
 .product-card {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjusted minmax */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
   gap: 20px;
   justify-content: center;
   padding: 20px;
@@ -99,35 +99,35 @@ h1 {
 .add-to-cart-button {
   padding: 10px 15px;
   font-size: 16px;
-  background-color: #5cb85c; /* Bootstrap success color */
+  background-color: #5cb85c; 
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   margin-top: 10px;
   transition: background-color 0.3s;
-  width: 100%; /* Full width button */
+  width: 100%; 
 }
 
 .add-to-cart-button:hover {
-  background-color: #4cae4c; /* Darker green on hover */
+  background-color: #4cae4c;
 }
 
 .stock {
-  color: #B12704; /* Color to match price for visibility */
+  color: #B12704;
   font-weight: bold;
   margin-top: 10px;
 }
 
 .stock-out {
-  color: red; /* Change text color to red */
-  font-weight: bold; /* Optional: make it bold */
-  text-align: center; /* Center align for better visibility */
-  margin-top: 10px; /* Add margin for spacing */
+  color: red; 
+  font-weight: bold; 
+  text-align: center; 
+  margin-top: 10px; 
 }
 
 .stock {
-  color: green; /* Change color for stock left message */
+  color: green; 
 }
 
 .loading {
@@ -137,7 +137,7 @@ h1 {
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
-  margin: auto; /* Center it */
+  margin: auto; 
 }
 
 @keyframes spin {
@@ -147,11 +147,11 @@ h1 {
 .product-item .stock {
   font-size: 14px;
   margin-top: 10px;
-  color: #f19812; /* Green for in-stock */
+  color: #f19812;
 }
 
 .product-item .stock.out-of-stock {
-  color: #B12704; /* Red for out-of-stock */
+  color: #B12704; 
 }
 
 .add-to-cart-button {
@@ -170,6 +170,6 @@ h1 {
   cursor: not-allowed;
 }
 .out-of-stock {
-  color: red; /* Change the text color to red */
-  font-weight: bold; /* Make the text bold (optional) */
+  color: red;
+  font-weight: bold; 
 }

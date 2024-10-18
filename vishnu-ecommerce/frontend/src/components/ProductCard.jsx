@@ -39,29 +39,41 @@ const ProductCard = () => {
 
   const addToCartHandler = async (productId, index) => {
     try {
-      const response = await fetch('http://localhost:5000/add-to-cart', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId }),
-      });
+        // Retrieve the user from localStorage
+        const user = JSON.parse(localStorage.getItem('user'));
 
-      const result = await response.json();
-      if (response.ok) {
-        console.log('Product added to cart:', productId);
-        
-        // Update the state to reflect the reduced stock
-        const updatedProducts = [...filteredProducts];
-        updatedProducts[index].quantity -= 1;
-        setFilteredProducts(updatedProducts);
-      } else {
-        alert(result.message);
-      }
+        // Check if the user exists and has an ID
+        if (user && user._id) {
+            const userId = user._id;
+
+            const response = await fetch('http://localhost:5000/add-to-cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, productId }),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                console.log('Product added to cart:', productId);
+
+                // Update the state to reflect the reduced stock
+                const updatedProducts = [...filteredProducts];
+                updatedProducts[index].quantity -= 1;
+                setFilteredProducts(updatedProducts);
+            } else {
+                alert(result.message);
+            }
+        } else {
+            console.error('User not found. Please log in.');
+            alert('User not found. Please log in.');
+        }
     } catch (error) {
-      console.error('Error adding product to cart:', error);
+        console.error('Error adding product to cart:', error);
     }
-  };
+};
+
 
   return (
     <div className="product-container">
