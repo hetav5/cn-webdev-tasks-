@@ -1,17 +1,18 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import './login.css'; // Add your own styles for login if needed
+import './login.css';
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    useEffect(()=>{
+
+    useEffect(() => {
         const auth = localStorage.getItem('user');
-        if(auth){
+        if (auth) {
             navigate('/');
         }
-    })
+    }, [navigate]); 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
@@ -27,7 +28,7 @@ const Login = () => {
                 let result = await response.json();
                 console.warn(result);
                 localStorage.setItem("user", JSON.stringify(result));
-                navigate('/');
+                navigate('/'); 
             } else {
                 let errorResult = await response.json();
                 console.error("Login failed:", errorResult.error);

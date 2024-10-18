@@ -1,45 +1,54 @@
-/* Container Styling */
+
 .add-product-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
+    transition: box-shadow 0.3s;
+}
+
+.add-product-container:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 h2 {
     text-align: center;
-    color: #131921;
+    color: #333;
     margin-bottom: 20px;
     font-weight: bold;
+    font-size: 1.5rem;
 }
 
-/* Form Styling */
 form {
     display: flex;
     flex-direction: column;
 }
 
 input, textarea {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #d5d9d9;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
     border-radius: 4px;
     outline: none;
     margin-bottom: 15px;
     font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Textarea Styling */
+input:focus, textarea:focus {
+    border-color: #febd69;
+    box-shadow: 0 0 4px rgba(254, 189, 105, 0.5);
+}
 textarea {
     resize: vertical;
     min-height: 80px;
 }
 
-/* Button Styling */
 button[type="submit"] {
     padding: 12px;
     background-color: #febd69;
@@ -47,30 +56,31 @@ button[type="submit"] {
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, box-shadow 0.3s;
     color: #fff;
     margin-top: 10px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 button[type="submit"]:hover {
     background-color: #f90;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* Error Message Styling */
 .error-message {
     color: #d9534f;
     font-size: 14px;
     margin-top: -10px;
     margin-bottom: 10px;
-    display: none; /* Hidden by default */
+    display: none;
     text-align: left;
 }
 
 .error-message.active {
-    display: block; /* Shown only when there's an error */
+    display: block; 
 }
 
-/* Aligning Input Fields */
 input, textarea, button[type="submit"] {
     width: 100%;
     box-sizing: border-box;

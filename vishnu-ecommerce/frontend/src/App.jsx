@@ -9,10 +9,7 @@ import Profile from './components/profile.jsx';
 import AddProduct from './components/AddProduct.jsx';
 import Cart from './components/Cart.jsx';
 import ProductCard from './components/ProductCard.jsx';
-
-function Home() {
-    return <div>Home</div>;
-}
+import Home from './components/Home'; 
 
 function UpdateProduct() {
     return <div>Update Product</div>;
@@ -29,13 +26,12 @@ function App() {
                 <Navbar />
                 <Routes>
                     <Route element={<PrivateComponents />}>
-                        <Route path="/" element={<Home />} />
+                        <Route path="/" element={<Home/>} />
                         <Route path="/addproduct" element={<AddProduct />} />
                         <Route path="/update" element={<UpdateProduct />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/logout" element={<Logout />} />
                         <Route path="/cart" element={<Cart />} />
-
                         <Route path="/products" element={<ProductCard />} />
                     </Route>
                     <Route path="/signup" element={<Signup />} /> 
