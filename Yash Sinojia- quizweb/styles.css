@@ -1,0 +1,160 @@
+body{
+    background-color: #007bff;
+}
+
+/* start button to center */
+.start-btn, .info-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* start quiz button styling */
+.start-btn button{
+    
+    font-size: 25px;
+    font-weight: 500;
+    color: #007bff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+     background: white; 
+    cursor: pointer;
+}
+
+.info-box{
+    
+    width: 500px;
+    border-radius: 1pc;
+    background-color: white;
+}
+
+.info-box .info-title{
+    height: 60px;
+    width: 100%;
+    border-bottom: 1px solid grey;
+    display: flex;
+    align-items: center;
+    padding: 0 120px;
+    font-size: 1rem;
+    /* font-weight: 500; */
+}
+
+.info-box .info-list{
+    padding: 15px 35px ;
+}
+.info-box .info-list .info{
+    margin: 5px 0 ;
+    font-size: 19px;
+}
+
+.info-box .info-list .info span{
+    color: #007bff;
+    font-weight: 650;
+}
+
+.info-box .buttons{
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 35px;
+    border-top: 1px solid lightslategray;
+
+}
+
+.info-box .buttons button{
+    margin: 5px;
+    height: 40px;
+    width: 100px;
+    /* background-color: white; */
+    color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 1pc;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+.buttons #restart{
+    color: white;
+    background-color: #007bff;
+}
+
+.buttons #restart:hover{
+    background-color: #0263ca;
+}
+
+.buttons #quit:hover{
+    background-color: #007bff;
+    color: white;
+}
+
+.quiz-txt{
+    background-color: white;
+    border-radius: 1pc;
+    width: 400px;
+    position: absolute;
+    top: 270px;
+    left: 560px;
+    padding: 20px;
+    font-size: 18px;
+}
+
+#question{
+    margin-bottom: 20px;
+    border-bottom: 1px solid grey;
+    padding-bottom: 10px;
+}
+
+.options{
+    margin-bottom: 5px;
+}
+
+.options #d{
+    margin-bottom: 20px;
+}
+
+.quiz-txt #submit{
+    margin: 5px;
+    height: 40px;
+    width: 100px;
+    color: white;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 1pc;
+    font-size: 15px;
+    cursor: pointer;
+}   
+
+.quiz-txt #submit:hover {
+    background-color: #0263ca;
+}
+
+.info-box, .quiz-box{
+    display: none;
+}
+
+.show{
+    display: block;
+}
+
+.hide{
+    display: none;
+}
+
+.score-box{
+    height: 100px;
+    width: 300px;
+    font-size: 1.5rem;
+    background-color: white;
+    color: #007bff;
+    border-radius: 1pc;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 270px;
+    left: 560px;
+    padding-left: 50px;
+}

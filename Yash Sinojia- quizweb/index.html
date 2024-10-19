@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizWeb</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- starting the quiz button -->
+    <div class="start-btn show">
+        <button>Start Quiz</button>      
+    </div>
+    
+    <!-- Info/rules div -->
+    <div class="info-box">
+        <div class="info-title">
+            <h2>Some Rules of the Quiz</h2>
+        </div>
+
+        <div class="info-list">
+            
+            <div class="info">There are 5 questions.</div>  
+            <div class="info">You can select only 1 option.</div>   
+            <div class="info">You will get points based on correct answers you give.</div>
+            <div class="info">You have only <span>15 seconds</span> per question.</div> 
+            
+        </div>
+
+        <div class="buttons">
+            <button id="quit">Exit quiz</button>
+            <button id="restart">Continue</button>
+        </div>
+    </div>
+
+    <!-- Quiz baxa -->
+     <div class="quiz-box">
+        
+        <section>
+            <div class="quiz-txt" id="quiz">
+                <div class="quiz-header">
+                    <h2 id="question">Question text</h2>
+                        <div class="options">
+                            <input type="radio" name="answer" id="a" class="answer">
+                            <label for="a" id="a_text">Answer A</label>
+                        </div>
+                            
+                        <div class="options">  
+                            <input type="radio" name="answer" id="b" class="answer">
+                            <label for="b" id="b_text">Answer B</label>
+                        </div>
+                          
+                        <div class="options">
+                            <input type="radio" name="answer" id="c" class="answer">
+                            <label for="c" id="c_text">Answer C</label>
+                        </div>
+                        
+                        <div class="options">
+                            <input type="radio" name="answer" id="d" class="answer">
+                            <label for="d" id="d_text">Answer D</label>
+                        </div>
+                            
+                        
+                </div>
+                <button id="submit">Submit</button>
+            </div>
+        </section>
+     </div>
+
+
+     <script src="Script.js"></script>
+</body>
+</html>
