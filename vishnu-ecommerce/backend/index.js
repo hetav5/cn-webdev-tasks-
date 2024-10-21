@@ -6,7 +6,7 @@ const { body, validationResult } = require('express-validator');
 const app = express();
 const User = require('./db/User'); 
 const Product = require('./db/Product');
-const Cart = require('./db/Cart');  // Assuming you've created a Cart model
+const Cart = require('./db/Cart');  
 require('./db/config');
 
 // Middleware
@@ -20,86 +20,76 @@ app.get("/test", (req, res) => {
 
 // Register Route
 app.post('/register', [
-  body('name').trim().notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Invalid email address'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-  body('phoneNumber').isMobilePhone().withMessage('Invalid phone number'),
-  body('address').trim().notEmpty().withMessage('Address is required'),
-  body('isAdmin').isBoolean().withMessage('isAdmin must be a boolean'),
-  body('adminCode').if(body('isAdmin').equals('true')).notEmpty().withMessage('Admin code is required for admin registration')
+    body('name').trim().notEmpty().withMessage('Name is required'),
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('phoneNumber').isMobilePhone().withMessage('Invalid phone number'),
+    body('address').trim().notEmpty().withMessage('Address is required'),
+    body('isAdmin').isBoolean().withMessage('isAdmin must be a boolean'),
+    body('adminCode')
+      .if(body('isAdmin').equals(true))
+      .notEmpty()
+      .withMessage('Admin code is required for admin registration')
 ], async (req, res) => {
-  try {
-    // Check for validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const { name, email, password, phoneNumber, address, isAdmin, adminCode } = req.body;
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: "Email already in use" });
+        }
+        if (isAdmin) {
+            const validAdminCode = '271103';
+            if (adminCode !== validAdminCode) {
+                return res.status(400).json({ error: "Invalid admin code" });
+            }
+        }
+
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword,
+            phoneNumber,
+            address,
+            isAdmin
+        });
+
+        const savedUser = await newUser.save();
+
+        const userResponse = savedUser.toObject();
+        delete userResponse.password;
+
+        res.status(201).json(userResponse);
+    } catch (error) {
+        console.error("Error during registration:", error);
+        res.status(500).json({ error: "Registration failed. Please try again." });
     }
-
-    const { name, email, password, phoneNumber, address, isAdmin, adminCode } = req.body;
-
-    // Check if the email already exists in the database
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ error: "Email already in use" });
-    }
-
-    // If registering as admin, validate the admin code
-    if (isAdmin) {
-      const validAdminCode = process.env.ADMIN_CODE || "271103"; // Store this securely in an environment variable
-      if (adminCode !== validAdminCode) {
-        return res.status(400).json({ error: "Invalid admin code" });
-      }
-    }
-
-    // Hash the password
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Create and save the new user
-    const newUser = new User({
-      name,
-      email,
-      password: hashedPassword,
-      phoneNumber,
-      address,
-      isAdmin
-    });
-
-    const savedUser = await newUser.save();
-
-    // Remove sensitive information before sending the response
-    const userResponse = savedUser.toObject();
-    delete userResponse.password;
-
-    res.status(201).json(userResponse);
-  } catch (error) {
-    console.error("Error during registration:", error);
-    res.status(500).json({ error: "Error saving user" });
-  }
 });
-
 // Login Route
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
-    // Validate the input
     if (!email || !password) {
         return res.status(400).json({ error: "Email and password are required" });
     }
 
     try {
-        // Find the user by email
         let user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({ error: "No user found" });
         }
-        // Check if the password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: "Invalid password" });
         }
-
-        // Remove the password before sending the response
         user = user.toObject();
         delete user.password;
         res.status(200).json(user);
@@ -172,28 +162,22 @@ app.post('/add-to-cart', async (req, res) => {
           return res.status(404).json({ success: false, message: 'Product not found.' });
       }
 
-      // Check if product is available
       if (product.quantity > 0) {
           // Find the user's cart or create a new one
           let cart = await Cart.findOne({ userId });
           if (!cart) {
               cart = new Cart({ userId, items: [] });
           }
-
-          // Check if the product is already in the cart
           const cartItem = cart.items.find(item => item.productId.toString() === productId);
           if (cartItem) {
               cartItem.quantity += 1;
           } else {
               cart.items.push({ productId, quantity: 1 });
           }
-
           await cart.save();
-
           // Decrease the product stock
           product.quantity -= 1;
           await product.save();
-
           res.status(200).json({ success: true, message: 'Product added to cart and stock updated.' });
       } else {
           res.status(400).json({ success: false, message: 'Product is out of stock.' });
@@ -201,56 +185,59 @@ app.post('/add-to-cart', async (req, res) => {
   } catch (error) {
       console.error('Error adding to cart:', error);
       res.status(500).json({ success: false, message: 'An error occurred while adding to cart.' });
-  }
+  } 
 });
 
-// Get cart items
+// Get cart items for a specific user
 app.get('/cart/:userId', async (req, res) => {
-  try {
-      const { userId } = req.params;
-      const cart = await Cart.findOne({ userId }).populate('items.productId');
-      if (!cart) {
-          return res.status(404).json({ message: 'Cart not found' });
-      }
-      res.status(200).json(cart);
-  } catch (error) {
-      console.error('Error fetching cart:', error);
-      res.status(500).json({ message: 'An error occurred while fetching the cart' });
-  }
+    try {
+        const { userId } = req.params;
+        
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required.' });
+        }
+
+        const cart = await Cart.findOne({ userId }).populate('items.productId', 'name price quantity description');
+
+        if (!cart || !cart.items.length) {
+            return res.status(404).json({ message: 'Cart is empty or does not exist.' });
+        }
+
+        res.status(200).json(cart);
+    } catch (error) {
+        console.error('Error fetching cart:', error);
+        res.status(500).json({ message: 'An error occurred while fetching the cart.' });
+    }
 });
 
 // Remove item from cart
-app.post('/api/cart/remove', async (req, res) => {
-  try {
-      const { userId, productId } = req.body;
-      const cart = await Cart.findOne({ userId });
-      if (!cart) {
-          return res.status(404).json({ message: 'Cart not found' });
-      }
+app.post('/remove-from-cart', async (req, res) => {
+    const { userId, productId } = req.body;
 
-      // Find the item in the cart
-      const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
-      if (itemIndex > -1) {
-          const item = cart.items[itemIndex];
-          // Remove the item from the cart
-          cart.items.splice(itemIndex, 1);
-          await cart.save();
+    try {
+        const cart = await Cart.findOne({ userId });
+        const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
 
-          // Increase the product stock
-          const product = await Product.findById(productId);
-          product.quantity += item.quantity;
-          await product.save();
-
-          res.status(200).json({ message: 'Item removed from cart and stock updated' });
-      } else {
-          res.status(404).json({ message: 'Item not found in cart' });
-      }
-  } catch (error) {
-      console.error('Error removing item from cart:', error);
-      res.status(500).json({ message: 'An error occurred while removing the item from cart' });
-  }
+        if (itemIndex > -1) {
+            // Decrease quantity if more than 1
+            if (cart.items[itemIndex].quantity > 1) {
+                cart.items[itemIndex].quantity -= 1;
+            } else {
+                // Remove the item if quantity is 1
+                cart.items.splice(itemIndex, 1);
+            }
+            await cart.save();
+            return res.status(200).json({ message: 'Item quantity updated', items: cart.items });
+        } else {
+            return res.status(404).json({ message: 'Item not found in cart' });
+        }
+    } catch (error) {
+        console.error("Error updating cart:", error);
+        return res.status(500).json({ message: 'Server error' });
+    }
 });
 
+// search
 app.get("/search/:key", async (req, res) => {
   try {
       let result = await Product.find({
@@ -259,8 +246,6 @@ app.get("/search/:key", async (req, res) => {
               { category: { $regex: req.params.key, $options: "i" } }
           ]
       });
-
-      // Check if products are found
       if (result.length > 0) {
           res.status(200).json(result);
       } else {
