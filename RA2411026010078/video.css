@@ -1,0 +1,50 @@
+.video-author{
+    color: rgb(96, 96, 96);
+}
+.video-title{
+    font-size:medium;
+}
+.Thumbnail{
+    width:100%;
+}
+.video-title{
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-size: 16px;
+    line-height: 20px;
+}
+.div-contanor{
+    cursor: pointer;
+    margin-right: 7px;
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;
+    transition: box-shadow 0.4s;
+}
+.div-contanor:hover{
+    box-shadow: 7px 9px 9px rgb(163, 160, 160);
+}
+.profile-picture{
+    width:80%;
+    margin-top:8px;
+    border-radius: 25px;
+    transition: box-shadow 0.4s;
+}
+.profile-picture:hover{
+    box-shadow:7px 3px 5px rgb(163, 160, 160);;
+}
+.video-info-grid{
+    display: grid;
+    grid-template-columns: 50px 1fr;
+}
+.video-Grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 10px;
+    row-gap: 12px;
+}
+@media(max-width: 750px){
+    .video-Grid{
+        grid-template-columns: 1fr 1fr;
+    }
+}
